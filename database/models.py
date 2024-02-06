@@ -1,5 +1,4 @@
-from pydantic import BaseModel
-from sqlalchemy import Column, ForeignKey, Integer, String, MetaData, Text, Float
+from sqlalchemy import Column, ForeignKey, Integer, String, Text, Float
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -12,7 +11,7 @@ class CafeModel(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(45), index=True)
     address = Column(String(255), index=True)
-    description = Column(Text, index=True)
+    description = Column(Text(length=65535), index=True)
 
     drinks = relationship("DrinksModel", back_populates="cafe")
     orders = relationship("OrderModel", back_populates="cafe")
@@ -26,7 +25,7 @@ class CoffeeModel(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(45), index=True)
-    description = Column(Text, index=True)
+    description = Column(Text(length=65535), index=True)
     location = Column(String(255), index=True)
 
     weights = relationship("WeightModel", back_populates="coffee")
@@ -39,7 +38,7 @@ class DrinksModel(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(45), index=True)
-    description = Column(Text, index=True)
+    description = Column(Text(length=65535), index=True)
 
     cafe_id = Column(Integer, ForeignKey("cafe.id"))
 
@@ -49,11 +48,11 @@ class DrinksModel(Base):
     products = relationship("ProductsModel", back_populates="drinks")
 
 
-class DesertModel(Base):
-    __tablename__ = "desert"
+class DessertModel(Base):
+    __tablename__ = "dessert"
 
     id = Column(Integer, primary_key=True, index=True)
-    products = relationship("ProductsModel", back_populates="desert")
+    products = relationship("ProductsModel", back_populates="dessert")
 
 
 class WeightModel(Base):
@@ -98,12 +97,12 @@ class ProductsModel(Base):
     cafe_id = Column(Integer, ForeignKey("cafe.id"))
     drinks_id = Column(Integer, ForeignKey("drinks.id"))
     coffee_id = Column(Integer, ForeignKey("coffee.id"))
-    desert_id = Column(Integer, ForeignKey("desert.id"))
+    dessert_id = Column(Integer, ForeignKey("dessert.id"))
 
     cafe = relationship("CafeModel", back_populates="products")
     drinks = relationship("DrinksModel", back_populates="products")
     coffee = relationship("CoffeeModel", back_populates="products")
-    desert = relationship("DesertModel", back_populates="products")
+    dessert = relationship("DessertModel", back_populates="products")
 
 
 class UserModel(Base):
@@ -111,7 +110,7 @@ class UserModel(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String(255), index=True)
-    password = Column(String(45), index=True)
+    password = Column(String(255), index=True)
     role = Column(String(45), index=True)
 
     favorites = relationship("FavoriteModel", back_populates="user")
