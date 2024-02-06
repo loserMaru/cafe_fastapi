@@ -39,9 +39,7 @@ class DrinksModel(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(45), index=True)
-    drinks_123 = Column(String(45))
-    drinks_1231 = Column(String(45))
-    drinks_3123 = Column(String(45))
+    description = Column(Text, index=True)
 
     cafe_id = Column(Integer, ForeignKey("cafe.id"))
 
