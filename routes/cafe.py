@@ -2,19 +2,14 @@ from typing import List
 
 from fastapi import APIRouter, HTTPException
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import sessionmaker
-
-from database.db import engine
+from database import async_session
 from database.models import CafeModel
 from schemas.cafe_pydantic import Cafe, CafeCreate, CafeUpdate
 
 router = APIRouter(tags=['Cafe Routes'])
 
-async_session = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
 
-
-@router.get("/cafes", response_model=List[Cafe])
+@router.get("/list", response_model=List[Cafe])
 async def get_all_cafes():
     async with async_session() as session:
         async with session.begin():
@@ -22,7 +17,7 @@ async def get_all_cafes():
             return cafes.scalars().all()
 
 
-@router.post("/cafes/", response_model=Cafe)
+@router.post("", response_model=Cafe)
 async def create_cafe(cafe: CafeCreate):
     async with async_session() as session:
         async with session.begin():
@@ -33,7 +28,7 @@ async def create_cafe(cafe: CafeCreate):
     return db_cafe
 
 
-@router.get("/cafes/{id}", response_model=Cafe)
+@router.get("/{id}", response_model=Cafe)
 async def get_cafe(id: int):
     async with async_session() as session:
         async with session.begin():
@@ -43,7 +38,7 @@ async def get_cafe(id: int):
             return cafe
 
 
-@router.put("/cafes/{id}", response_model=Cafe)
+@router.put("/{id}", response_model=Cafe)
 async def update_cafe(id: int, cafe: CafeUpdate):
     async with async_session() as session:
         async with session.begin():
@@ -57,7 +52,7 @@ async def update_cafe(id: int, cafe: CafeUpdate):
     return db_cafe
 
 
-@router.delete("/cafes/{id}")
+@router.delete("/{id}")
 async def delete_cafe(id: int):
     async with async_session() as session:
         async with session.begin():

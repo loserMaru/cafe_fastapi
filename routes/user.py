@@ -2,17 +2,13 @@ from typing import List
 
 from fastapi import APIRouter, HTTPException
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import sessionmaker
 
-from database.db import engine
+from database import async_session
 from database.models import UserModel
 from schemas.user_pydantic import User, UserCreate, UserUpdate
 from utils.security import hash_password
 
 router = APIRouter(tags=['User Routes'])
-
-async_session = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
 
 
 @router.get("", response_model=List[User])
