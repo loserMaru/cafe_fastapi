@@ -22,8 +22,4 @@ DATABASE_URL = "mysql+aiomysql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAM
 # Создание асинхронного движка SQLAlchemy
 engine = create_async_engine(DATABASE_URL, echo=True, future=True, pool_size=20, max_overflow=0)
 
-async_session = sessionmaker(
-    bind=engine,
-    class_=AsyncSession,
-    expire_on_commit=False,
-)
+async_session = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
