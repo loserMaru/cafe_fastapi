@@ -11,7 +11,7 @@ from utils.security import hash_password
 router = APIRouter(tags=['User Routes'])
 
 
-@router.get("", response_model=List[User])
+@router.get("/list", response_model=List[User])
 async def get_all_users():
     async with async_session() as session:
         async with session.begin():
