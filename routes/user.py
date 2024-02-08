@@ -23,6 +23,11 @@ async def get_all_users():
 async def create_user(user: UserCreate):
     async with async_session() as session:
         async with session.begin():
+            # Проверяем, существует ли пользователь с таким email
+            existing_user = await session.execute(select(UserModel).where(UserModel.email == user.email))
+            if existing_user.scalar_one_or_none():
+                raise HTTPException(status_code=400, detail="User with this email already exists")
+
             # Устанавливаем значение по умолчанию для роли
             user_data = user.dict()
             user_data["role"] = "user"
@@ -33,7 +38,6 @@ async def create_user(user: UserCreate):
             await session.commit()
         await session.refresh(db_user)
     return db_user
-
 
 @router.get("/{id}", response_model=User)
 async def get_user(id: int):
