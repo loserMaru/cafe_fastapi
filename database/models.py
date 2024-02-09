@@ -1,6 +1,8 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, Text, Float
+from sqlalchemy import Column, ForeignKey, Integer, String, Text, Float, select
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+
+from database.db import database
 
 Base = declarative_base()
 
@@ -115,6 +117,12 @@ class UserModel(Base):
 
     favorites = relationship("FavoriteModel", back_populates="user")
     ratings = relationship("RatingModel", back_populates="user")
+
+    @classmethod
+    async def get_by_email(cls, email: str):
+        query = select(cls).where(cls.email == email)
+        result = await database.execute(query)
+        return result.scalar_one()
 
 
 class FavoriteModel(Base):
