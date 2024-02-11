@@ -13,4 +13,4 @@ app.include_router(user.router, prefix="/api/users")
 app.include_router(auth.router, prefix="/api/auth")
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", reload=True)
+    uvicorn.run(app, reload=True)
