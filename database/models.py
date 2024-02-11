@@ -1,10 +1,15 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, Text, Float, select
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, ForeignKey, Integer, String, Text, Float, select, create_engine
+from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
 from database.db import database
 
 Base = declarative_base()
+
+# DATABASE_URL = "postgresql://postgres:4863826M@localhost/cafe_fastapi"
+# engine = create_engine(DATABASE_URL)
+# SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+# db = SessionLocal()
 
 
 class CafeModel(Base):
@@ -13,7 +18,7 @@ class CafeModel(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(45), index=True)
     address = Column(String(255), index=True)
-    description = Column(Text(length=65535), index=True)
+    description = Column(Text, index=True)
 
     drinks = relationship("DrinksModel", back_populates="cafe")
     orders = relationship("OrderModel", back_populates="cafe")
@@ -27,7 +32,7 @@ class CoffeeModel(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(45), index=True)
-    description = Column(Text(length=65535), index=True)
+    description = Column(Text, index=True)
     location = Column(String(255), index=True)
 
     weights = relationship("WeightModel", back_populates="coffee")
@@ -40,7 +45,7 @@ class DrinksModel(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(45), index=True)
-    description = Column(Text(length=65535), index=True)
+    description = Column(Text, index=True)
 
     cafe_id = Column(Integer, ForeignKey("cafe.id"))
 
@@ -146,3 +151,6 @@ class RatingModel(Base):
 
     cafe = relationship("CafeModel", back_populates="ratings")
     user = relationship("UserModel", back_populates="ratings")
+
+
+# Base.metadata.create_all(bind=engine)
