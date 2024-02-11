@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from config import DB_USER, DB_PASS, DB_HOST, DB_PORT, DB_NAME
 
 # URL вашей базы данных
-DATABASE_URL = "mysql+aiomysql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}".format(
+DATABASE_URL = "postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}".format(
     DB_USER=DB_USER,
     DB_PASS=DB_PASS,
     DB_HOST=DB_HOST,
