@@ -11,6 +11,7 @@
 
 # AWS User-specific
 .idea/**/aws.xml
+.env-non-dev
 
 # Generated files
 .idea/**/contentModel.xml
